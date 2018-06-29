@@ -29,7 +29,14 @@ const headers: { [ name: string ] : any } = {
 
 let loginToken: string = '';
 const ethAddress: string = '0xd80Df6Cc3241F056BD518CC82E296C2a471';
-let lastValue: number = 11111;
+let lastValue: number = 22422;
+let fromIds: Array<string> = [
+    'df28c6fa241e442784a402b02b9073fc',
+    '7199d7116db2422b8f7d6d9aef3224f2',
+    '1de7e78ae81a4574802b6a343784af8b',
+    '9da81ec0259142d49119579c9acb65b5',
+    '8893eaf5a7f747299034c115d0752d33'
+];
 
 async function sleep( time: number ): Promise<void> {
     return new Promise<void>( ( resolve ) => {
@@ -55,13 +62,22 @@ async function sendSMSCode( phoneNumber: string ): Promise<void> {
 
 async function register( smsCode: string, ethAddress: string, phoneNumber: string ): Promise<void> {
     const url: string = `${ ETU_HOST }/user/register`;
+
+    let randomFromId: string = '';
+    const index: number = Math.floor( Math.random() * fromIds.length );
+    randomFromId = fromIds[ index ];
+    if ( undefined === randomFromId ) {
+        randomFromId = fromIds[ 0 ];
+    }
+
     const resultContent: Response = await postPromise( url, {
         headers,
         form : {
             code: smsCode,
             phoneNum: phoneNumber,
             wallet : ethAddress,
-            fromId: '411f7e5048e34a4681451049eec4edc9'
+            // fromId: randomFromId
+            fromId: '08b615ed10f04b328683f3479941aca1'
         }
     } );
 
@@ -165,7 +181,7 @@ async function start(): Promise<void> {
         if ( '' === smsCode ) {
             throw new Error( 'get sms code timeout!' );
         }
-    
+        
         await register( smsCode, `${ ethAddress }${ lastValue++ }`, phoneNumber );
         await sleep( 5 * 1000 );
     }
