@@ -76,8 +76,7 @@ async function register( smsCode: string, ethAddress: string, phoneNumber: strin
             code: smsCode,
             phoneNum: phoneNumber,
             wallet : ethAddress,
-            // fromId: randomFromId
-            fromId: '08b615ed10f04b328683f3479941aca1'
+            fromId: randomFromId
         }
     } );
 
